@@ -1,0 +1,42 @@
+server:
+  port: 8081
+
+
+# Init Chaos Monkey for Spring Boot by profile
+spring:
+  profiles:
+    active: chaos-monkey
+  application:
+    name: toys-bestseller
+  cloud:
+    kubernetes:
+      enabled: false
+
+
+# Configure Chaos Monkey - enabled = false
+chaos:
+  monkey:
+#    enabled: false
+    watcher:
+      restController: true
+      service: false
+    assaults:
+      latency-active: true
+
+# Spring Boot Actuator Endpoint Chaos Monkey for Spring Boot
+management:
+  endpoint:
+    chaosmonkey:
+      enabled: true
+    restart:
+      enabled: true
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

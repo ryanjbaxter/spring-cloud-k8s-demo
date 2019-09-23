@@ -1,0 +1,31 @@
+server:
+  port: 8082
+
+management:
+  endpoint:
+    chaosmonkey:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+chaos:
+  monkey:
+    enabled: false
+    watcher:
+      restController: true
+      service: false
+    assaults:
+      latency-active: true
+spring:
+  profiles:
+    active: chaos-monkey
+  application:
+    name: fashion-bestseller
+  cloud:
+    kubernetes:
+      enabled: false
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

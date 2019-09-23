@@ -1,0 +1,18 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+server:
+  port: 8070
+spring:
+  application:
+    name: gateway
+  cloud:
+    kubernetes:
+      enabled: false
+    gateway:
+      discovery:
+        locator:
+          lowerCaseServiceId: true
+          enabled: true

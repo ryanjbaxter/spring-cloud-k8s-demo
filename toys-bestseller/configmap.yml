@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: toys-bestseller
+data:
+  chaos.monkey.enabled: "false"

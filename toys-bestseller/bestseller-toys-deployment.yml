@@ -1,0 +1,44 @@
+# APP DEPLOYMENT
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: toys-bestseller
+  name: toys-bestseller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: toys-bestseller-exposed
+  template:
+    metadata:
+      labels:
+        run: toys-bestseller-exposed
+    spec:
+      serviceAccountName: chaos
+      containers:
+        - image: ryanjbaxter/bestseller-toys
+          name: toys-bestseller
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+
+---
+
+# APP SERVICE
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: toys-bestseller
+  name: toys-bestseller
+spec:
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    run: toys-bestseller-exposed
+  type: NodePort

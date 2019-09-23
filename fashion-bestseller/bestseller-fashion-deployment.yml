@@ -1,0 +1,44 @@
+# APP DEPLOYMENT
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: fashion-bestseller
+  name: fashion-bestseller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: fashion-bestseller-exposed
+  template:
+    metadata:
+      labels:
+        run: fashion-bestseller-exposed
+    spec:
+      serviceAccountName: chaos
+      containers:
+        - image: ryanjbaxter/bestseller-fashion
+          name: fashion-bestseller
+          ports:
+            - containerPort: 8082
+              protocol: TCP
+
+---
+
+# APP SERVICE
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: fashion-bestseller
+  name: fashion-bestseller
+spec:
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: 8082
+  selector:
+    run: fashion-bestseller-exposed
+  type: NodePort

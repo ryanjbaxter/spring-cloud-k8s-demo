@@ -1,0 +1,44 @@
+# APP DEPLOYMENT
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: hotdeals
+  name: hotdeals
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: hotdeals-exposed
+  template:
+    metadata:
+      labels:
+        run: hotdeals-exposed
+    spec:
+      serviceAccountName: chaos
+      containers:
+        - image: ryanjbaxter/hot-deals
+          name: hotdeals
+          ports:
+            - containerPort: 8083
+              protocol: TCP
+
+---
+
+# APP SERVICE
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: hotdeals
+  name: hotdeals
+spec:
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8083
+  selector:
+    run: hotdeals-exposed
+  type: NodePort
