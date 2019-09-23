@@ -4,7 +4,7 @@ Demo of Chaos Monkey for Spring Boot Using Spring Cloud Kubernetes
 # Building The Containers
 
 Each project contains a Dockerfile that will create a container for the app.  You can do this easily
-by running `mvn clean package -Pdocker`.
+by running `./mvn clean package -Pdocker`.
 
 **NOTE** You should edit the parent POM file and change the value of `docker.image.prefix` to
 your own prefix.
