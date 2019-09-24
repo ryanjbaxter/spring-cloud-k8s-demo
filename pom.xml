@@ -20,7 +20,7 @@
     <properties>
         <!--Docker Container Image Prefix -->
         <docker.image.prefix>ryanjbaxter</docker.image.prefix>
-        <docker-maven-plugin.version>1.4.3</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.31.0</docker-maven-plugin.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -124,7 +124,7 @@
                         <plugin>
                             <groupId>io.fabric8</groupId>
                             <artifactId>docker-maven-plugin</artifactId>
-                            <version>0.31.0</version>
+                            <version>${docker-maven-plugin.version}</version>
                             <configuration>
                                 <images>
                                     <image>
