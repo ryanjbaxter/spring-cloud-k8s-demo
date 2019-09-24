@@ -122,18 +122,25 @@
                 <pluginManagement>
                     <plugins>
                         <plugin>
-                            <groupId>com.spotify</groupId>
-                            <artifactId>dockerfile-maven-plugin</artifactId>
-                            <version>${docker-maven-plugin.version}</version>
-
+                            <groupId>io.fabric8</groupId>
+                            <artifactId>docker-maven-plugin</artifactId>
+                            <version>0.31.0</version>
                             <configuration>
-                                <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                                <buildArgs>
-                                    <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-                                    <SERVICE_NAME>${project.name}</SERVICE_NAME>
-                                </buildArgs>
-                                <tag>${project.version}</tag>
-                                <pullNewerImage>false</pullNewerImage>
+                                <images>
+                                    <image>
+                                        <name>${docker.image.prefix}/${project.artifactId}</name>
+                                        <build>
+                                            <contextDir>${project.basedir}</contextDir>
+                                            <tags>
+                                                <tag>${project.version}</tag>
+                                            </tags>
+                                            <args>
+                                                <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                                                <SERVICE_NAME>${project.name}</SERVICE_NAME>
+                                            </args>
+                                        </build>
+                                    </image>
+                                </images>
                             </configuration>
                             <executions>
                                 <execution>
