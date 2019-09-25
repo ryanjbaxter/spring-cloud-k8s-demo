@@ -20,14 +20,16 @@
     <properties>
         <!--Docker Container Image Prefix -->
         <docker.image.prefix>ryanjbaxter</docker.image.prefix>
-        <docker-maven-plugin.version>1.4.3</docker-maven-plugin.version>
+        <docker-maven-plugin.version>0.31.0</docker-maven-plugin.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
         <spring-boot-dependencies.version>2.1.8.RELEASE</spring-boot-dependencies.version>
         <spring-cloud.version>Greenwich.BUILD-SNAPSHOT</spring-cloud.version>
-        <lombok.version>1.16.20</lombok.version>
+        <lombok.version>1.18.10</lombok.version>
         <chaos-monkey-spring-boot.version>2.0.2</chaos-monkey-spring-boot.version>
     </properties>
 
@@ -85,6 +87,7 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
             	<groupId>io.dekorate</groupId>
@@ -119,18 +122,25 @@
                 <pluginManagement>
                     <plugins>
                         <plugin>
-                            <groupId>com.spotify</groupId>
-                            <artifactId>dockerfile-maven-plugin</artifactId>
+                            <groupId>io.fabric8</groupId>
+                            <artifactId>docker-maven-plugin</artifactId>
                             <version>${docker-maven-plugin.version}</version>
-
                             <configuration>
-                                <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                                <buildArgs>
-                                    <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-                                    <SERVICE_NAME>${project.name}</SERVICE_NAME>
-                                </buildArgs>
-                                <tag>${project.version}</tag>
-                                <pullNewerImage>false</pullNewerImage>
+                                <images>
+                                    <image>
+                                        <name>${docker.image.prefix}/${project.artifactId}</name>
+                                        <build>
+                                            <contextDir>${project.basedir}</contextDir>
+                                            <tags>
+                                                <tag>${project.version}</tag>
+                                            </tags>
+                                            <args>
+                                                <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                                                <SERVICE_NAME>${project.name}</SERVICE_NAME>
+                                            </args>
+                                        </build>
+                                    </image>
+                                </images>
                             </configuration>
                             <executions>
                                 <execution>
