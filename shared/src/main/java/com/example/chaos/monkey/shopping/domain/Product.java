@@ -9,6 +9,8 @@ public class Product {
     private String name;
     private ProductCategory category;
 
+    public Product(){}
+
     public Product(long id, String name, ProductCategory category) {
         this.id = id;
         this.name = name;

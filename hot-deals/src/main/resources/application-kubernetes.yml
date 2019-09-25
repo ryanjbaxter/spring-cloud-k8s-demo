@@ -11,3 +11,6 @@ eureka:
 dekorate:
   kubernetes:
     serviceType: "NodePort"
+    envVars:
+      - name: "SPRING_PROFILES_ACTIVE"
+        value: "kubernetes"

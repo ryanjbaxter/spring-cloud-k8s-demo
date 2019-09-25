@@ -12,6 +12,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,8 @@ public class GatewayApplication {
 	}
 
 	@Bean
-	public RouteLocator routes(RouteLocatorBuilder builder) {
+	@Profile("!kubernetes")
+	public RouteLocator defaultRoutes(RouteLocatorBuilder builder) {
 		return builder.routes()
 				.route(p -> p.path("/hotdeals**").filters(f ->
 						f.hystrix(c -> c.setName("hotdeals").setFallbackUri("forward:/fallback"))).uri("lb://hotdeals"))
@@ -42,6 +44,19 @@ public class GatewayApplication {
 						f.hystrix(c -> c.setName("fashion").setFallbackUri("forward:/fallback"))).uri("lb://fashion-bestseller"))
 				.route(p -> p.path("/toys/**").filters(f ->
 						f.hystrix(c -> c.setName("toys").setFallbackUri("forward:/fallback"))).uri("lb://toys-bestseller"))
+				.build();
+	}
+
+	@Bean
+	@Profile("kubernetes")
+	public RouteLocator k8sRoutes(RouteLocatorBuilder builder) {
+		return builder.routes()
+				.route(p -> p.path("/hotdeals**").filters(f ->
+						f.hystrix(c -> c.setName("hotdeals").setFallbackUri("forward:/fallback"))).uri("http://hot-deals"))
+				.route(p -> p.path("/fashion/**").filters(f ->
+						f.hystrix(c -> c.setName("fashion").setFallbackUri("forward:/fallback"))).uri("http://fashion-bestseller"))
+				.route(p -> p.path("/toys/**").filters(f ->
+						f.hystrix(c -> c.setName("toys").setFallbackUri("forward:/fallback"))).uri("http://toys-bestseller"))
 				.build();
 	}
 

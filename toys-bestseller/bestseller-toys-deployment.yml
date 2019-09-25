@@ -1,44 +1,83 @@
-# APP DEPLOYMENT
-
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  labels:
-    run: toys-bestseller
-  name: toys-bestseller
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      run: toys-bestseller-exposed
-  template:
+---
+apiVersion: "v1"
+kind: "List"
+items:
+  - apiVersion: "v1"
+    kind: "Service"
     metadata:
       labels:
-        run: toys-bestseller-exposed
+        app: "toys-bestseller"
+        version: "1.0-SNAPSHOT"
+        group: "ryanjbaxter"
+      name: "toys-bestseller"
     spec:
-      serviceAccountName: chaos
-      containers:
-        - image: ryanjbaxter/bestseller-toys
-          name: toys-bestseller
-          ports:
-            - containerPort: 8081
-              protocol: TCP
-
----
-
-# APP SERVICE
-
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    run: toys-bestseller
-  name: toys-bestseller
-spec:
-  ports:
-    - port: 8081
-      protocol: TCP
-      targetPort: 8081
-  selector:
-    run: toys-bestseller-exposed
-  type: NodePort
+      ports:
+        - name: "http"
+          port: 80
+          targetPort: 8081
+      selector:
+        app: "toys-bestseller"
+        version: "1.0-SNAPSHOT"
+        group: "ryanjbaxter"
+      type: "NodePort"
+  - apiVersion: "apps/v1"
+    kind: "Deployment"
+    metadata:
+      labels:
+        app: "toys-bestseller"
+        version: "1.0-SNAPSHOT"
+        group: "ryanjbaxter"
+      name: "toys-bestseller"
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: "toys-bestseller"
+          version: "1.0-SNAPSHOT"
+          group: "ryanjbaxter"
+      template:
+        metadata:
+          labels:
+            app: "toys-bestseller"
+            version: "1.0-SNAPSHOT"
+            group: "ryanjbaxter"
+        spec:
+          volumes:
+          # kubectl create configmap demo --from-file=toys-bestseller/src/main/resources/application.yml
+            - name: config-volume
+              configMap:
+                name: demo
+          containers:
+            - env:
+                - name: "KUBERNETES_NAMESPACE"
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: "metadata.namespace"
+                - name: "SPRING_PROFILES_ACTIVE"
+                  value: "kubernetes,chaos-monkey"
+              image: "ryanjbaxter/toys-bestseller:1.0-SNAPSHOT"
+              imagePullPolicy: "IfNotPresent"
+              livenessProbe:
+                httpGet:
+                  path: "/actuator/health"
+                  port: 8081
+                  scheme: "HTTP"
+                initialDelaySeconds: 0
+                periodSeconds: 30
+                timeoutSeconds: 10
+              name: "toys-bestseller"
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /config
+              ports:
+                - containerPort: 80
+                  name: "http"
+                  protocol: "TCP"
+              readinessProbe:
+                httpGet:
+                  path: "/actuator/health"
+                  port: 8081
+                  scheme: "HTTP"
+                initialDelaySeconds: 0
+                periodSeconds: 30
+                timeoutSeconds: 10

@@ -10,3 +10,12 @@ eureka:
 dekorate:
   kubernetes:
     serviceType: "NodePort"
+    envVars:
+      - name: "SPRING_PROFILES_ACTIVE"
+        value: "kubernetes"
+    ports:
+      - name: "http80"
+        containerPort: 80
+        hostPort: 8082
+    livenessProbe:
+      tcpSocketAction: "localhost:8082"

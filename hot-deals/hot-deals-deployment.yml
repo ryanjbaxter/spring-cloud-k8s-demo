@@ -1,44 +1,75 @@
-# APP DEPLOYMENT
-
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  labels:
-    run: hotdeals
-  name: hotdeals
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      run: hotdeals-exposed
-  template:
+---
+apiVersion: "v1"
+kind: "List"
+items:
+  - apiVersion: "v1"
+    kind: "Service"
     metadata:
       labels:
-        run: hotdeals-exposed
+        app: "hot-deals"
+        version: "1.0-SNAPSHOT"
+        group: "ryanjbaxter"
+      name: "hot-deals"
     spec:
-      serviceAccountName: chaos
-      containers:
-        - image: ryanjbaxter/hot-deals
-          name: hotdeals
-          ports:
-            - containerPort: 8083
-              protocol: TCP
-
----
-
-# APP SERVICE
-
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    run: hotdeals
-  name: hotdeals
-spec:
-  ports:
-    - port: 8081
-      protocol: TCP
-      targetPort: 8083
-  selector:
-    run: hotdeals-exposed
-  type: NodePort
+      ports:
+        - name: "http"
+          port: 80
+          targetPort: 8083
+      selector:
+        app: "hot-deals"
+        version: "1.0-SNAPSHOT"
+        group: "ryanjbaxter"
+      type: "NodePort"
+  - apiVersion: "apps/v1"
+    kind: "Deployment"
+    metadata:
+      labels:
+        app: "hot-deals"
+        version: "1.0-SNAPSHOT"
+        group: "ryanjbaxter"
+      name: "hot-deals"
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: "hot-deals"
+          version: "1.0-SNAPSHOT"
+          group: "ryanjbaxter"
+      template:
+        metadata:
+          labels:
+            app: "hot-deals"
+            version: "1.0-SNAPSHOT"
+            group: "ryanjbaxter"
+        spec:
+          containers:
+            - env:
+                - name: "KUBERNETES_NAMESPACE"
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: "metadata.namespace"
+                - name: "SPRING_PROFILES_ACTIVE"
+                  value: "kubernetes"
+              image: "ryanjbaxter/hot-deals:1.0-SNAPSHOT"
+              imagePullPolicy: "IfNotPresent"
+              livenessProbe:
+                httpGet:
+                  path: "/actuator/health"
+                  port: 8083
+                  scheme: "HTTP"
+                initialDelaySeconds: 0
+                periodSeconds: 30
+                timeoutSeconds: 10
+              name: "hot-deals"
+              ports:
+                - containerPort: 80
+                  name: "http"
+                  protocol: "TCP"
+              readinessProbe:
+                httpGet:
+                  path: "/actuator/health"
+                  port: 8083
+                  scheme: "HTTP"
+                initialDelaySeconds: 0
+                periodSeconds: 30
+                timeoutSeconds: 10

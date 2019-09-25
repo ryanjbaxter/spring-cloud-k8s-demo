@@ -16,7 +16,7 @@ spring:
 # Configure Chaos Monkey - enabled = false
 chaos:
   monkey:
-#    enabled: false
+#     enabled: false
     watcher:
       restController: true
       service: false

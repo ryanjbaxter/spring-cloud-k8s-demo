@@ -1,44 +1,75 @@
-# APP DEPLOYMENT
-
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  labels:
-    run: fashion-bestseller
-  name: fashion-bestseller
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      run: fashion-bestseller-exposed
-  template:
+---
+apiVersion: "v1"
+kind: "List"
+items:
+  - apiVersion: "v1"
+    kind: "Service"
     metadata:
       labels:
-        run: fashion-bestseller-exposed
+        app: "fashion-bestseller"
+        version: "1.0-SNAPSHOT"
+        group: "ryanjbaxter"
+      name: "fashion-bestseller"
     spec:
-      serviceAccountName: chaos
-      containers:
-        - image: ryanjbaxter/bestseller-fashion
-          name: fashion-bestseller
-          ports:
-            - containerPort: 8082
-              protocol: TCP
-
----
-
-# APP SERVICE
-
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    run: fashion-bestseller
-  name: fashion-bestseller
-spec:
-  ports:
-    - port: 8082
-      protocol: TCP
-      targetPort: 8082
-  selector:
-    run: fashion-bestseller-exposed
-  type: NodePort
+      ports:
+        - name: "http"
+          port: 80
+          targetPort: 8082
+      selector:
+        app: "fashion-bestseller"
+        version: "1.0-SNAPSHOT"
+        group: "ryanjbaxter"
+      type: "NodePort"
+  - apiVersion: "apps/v1"
+    kind: "Deployment"
+    metadata:
+      labels:
+        app: "fashion-bestseller"
+        version: "1.0-SNAPSHOT"
+        group: "ryanjbaxter"
+      name: "fashion-bestseller"
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: "fashion-bestseller"
+          version: "1.0-SNAPSHOT"
+          group: "ryanjbaxter"
+      template:
+        metadata:
+          labels:
+            app: "fashion-bestseller"
+            version: "1.0-SNAPSHOT"
+            group: "ryanjbaxter"
+        spec:
+          containers:
+            - env:
+                - name: "KUBERNETES_NAMESPACE"
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: "metadata.namespace"
+                - name: "SPRING_PROFILES_ACTIVE"
+                  value: "kubernetes"
+              image: "ryanjbaxter/fashion-bestseller:1.0-SNAPSHOT"
+              imagePullPolicy: "IfNotPresent"
+              livenessProbe:
+                httpGet:
+                  path: "/actuator/health"
+                  port: 8082
+                  scheme: "HTTP"
+                initialDelaySeconds: 0
+                periodSeconds: 30
+                timeoutSeconds: 10
+              name: "fashion-bestseller"
+              ports:
+                - containerPort: 80
+                  name: "http"
+                  protocol: "TCP"
+              readinessProbe:
+                httpGet:
+                  path: "/actuator/health"
+                  port: 8082
+                  scheme: "HTTP"
+                initialDelaySeconds: 0
+                periodSeconds: 30
+                timeoutSeconds: 10

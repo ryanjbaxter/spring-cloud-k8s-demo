@@ -3,6 +3,10 @@ package com.example.chaos.monkey.shopping.bestseller.toys;
 import com.example.chaos.monkey.shopping.domain.Product;
 import com.example.chaos.monkey.shopping.domain.ProductBuilder;
 import com.example.chaos.monkey.shopping.domain.ProductCategory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +22,11 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping("/toys")
 public class BestsellerToysRestController {
 
+    private final Log LOG = LogFactory.getLog(BestsellerToysRestController.class);
+
     @GetMapping("/bestseller")
     public List<Product> getBestsellerProducts() {
+        LOG.warn("Returning toys!");
         AtomicLong aLong = new AtomicLong(1);
 
         ProductBuilder productBuilder = new ProductBuilder();
