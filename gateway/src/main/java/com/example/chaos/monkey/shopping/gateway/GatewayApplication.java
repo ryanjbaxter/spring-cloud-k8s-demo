@@ -37,7 +37,7 @@ public class GatewayApplication {
 	public RouteLocator routes(RouteLocatorBuilder builder) {
 		return builder.routes()
 				.route(p -> p.path("/hotdeals**").filters(f ->
-						f.hystrix(c -> c.setName("hotdeals").setFallbackUri("forward:/fallback"))).uri("lb://hotdeals"))
+						f.hystrix(c -> c.setName("hotdeals").setFallbackUri("forward:/fallback"))).uri("lb://hot-deals"))
 				.route(p -> p.path("/fashion/**").filters(f ->
 						f.hystrix(c -> c.setName("fashion").setFallbackUri("forward:/fallback"))).uri("lb://fashion-bestseller"))
 				.route(p -> p.path("/toys/**").filters(f ->
