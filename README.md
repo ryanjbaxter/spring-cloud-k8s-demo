@@ -24,7 +24,7 @@ kubectl create --filename spring-cloud-k8s-demo/toys-bestseller/configmap.yml
 kubectl create --filename spring-cloud-k8s-demo/toys-bestseller/target/classes/META-INF/dekorate/kubernetes.yml
 kubectl create --filename spring-cloud-k8s-demo/fashion-bestseller/target/classes/META-INF/dekorate/kubernetes.yml
 kubectl create --filename spring-cloud-k8s-demo/hot-deals/target/classes/META-INF/dekorate/kubernetes.yml
-kubectl create --filename cspring-cloud-k8s-demo/gateway/target/classes/META-INF/dekorate/kubernetes.yml
+kubectl create --filename spring-cloud-k8s-demo/gateway/target/classes/META-INF/dekorate/kubernetes.yml
 ```
 
 ## Testing The Apps
