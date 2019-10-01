@@ -11,6 +11,9 @@ spring:
   cloud:
     kubernetes:
       enabled: false
+  data:
+    rest:
+      basePath: "/jpa"
 
 
 # Configure Chaos Monkey - enabled = false
