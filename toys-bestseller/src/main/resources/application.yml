@@ -14,6 +14,19 @@ spring:
   data:
     rest:
       basePath: "/jpa"
+#  datasource:
+#    url: "jdbc:postgresql://localhost:31612/s1p"
+#    username: "root"
+#    password: "password"
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
 
 
 # Configure Chaos Monkey - enabled = false

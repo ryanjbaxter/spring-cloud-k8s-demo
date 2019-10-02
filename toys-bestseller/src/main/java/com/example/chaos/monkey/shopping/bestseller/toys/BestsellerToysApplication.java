@@ -12,7 +12,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EntityScan(basePackages = "com.example.chaos.monkey.shopping.domain")
+@EntityScan(basePackages = {"com.example.chaos.monkey.shopping.domain"})
 public class BestsellerToysApplication implements CommandLineRunner {
 
 	@Autowired
