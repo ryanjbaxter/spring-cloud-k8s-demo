@@ -1,9 +1,6 @@
 package com.example.chaos.monkey.shopping.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author Benjamin Wilms
@@ -12,9 +9,11 @@ import javax.persistence.Id;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private ProductCategory category;
 
     public Product() {}
