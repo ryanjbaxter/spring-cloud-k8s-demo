@@ -3,21 +3,37 @@ Demo of Chaos Monkey for Spring Boot Using Spring Cloud Kubernetes
 
 # Building The Containers
 
-Each project contains a Dockerfile that will create a container for the app.  You can do this easily
-by running `./mvn clean package -Pdocker`.
+> Note: you should edit the parent POM file and change the value of `docker.image.prefix` to your own prefix, or use `-Ddocker.image.prefix=<prefix>`.
 
-**NOTE** You should edit the parent POM file and change the value of `docker.image.prefix` to
-your own prefix.
+## Using Fabric8 build
+
+> Note: this requires that you have docker installed locally
+
+Each project contains a Dockerfile that will create a container for the app.  You can do this easily by running:
+
+```console
+./mvnw clean package -Pdocker
+```
 
 After building the container images you will need to push them to a repository that your Kubernetes
 deployment has access to, for example Docker Hub.
 
-# Deploying To Kubernetes 
+## Using Google Java Image Builder
+
+> Note: JIB can build and push images without needing docker installed
+
+JIB will build and push your application straight to the docker registry
+
+```console
+$ mvn compile jib:build
+```
+
+# Deploying To Kubernetes
 
 Each project uses [Dekorate](https://github.com/dekorateio/dekorate) in order to build a YAML file that can be used to deploy the app to Kubernetes.
 
 To create the YAML files all you need to do is run `./mvnw clean package`.  The YAML files are located in
-`/<module>/target/classes/META-INF/dekorate`.  
+`/<module>/target/classes/META-INF/dekorate`. You may need to modify the images in the manifests to match your prefix from above.
 
 ```
 kubectl create --filename spring-cloud-k8s-demo/toys-bestseller/configmap.yml

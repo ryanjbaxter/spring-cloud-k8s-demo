@@ -24,3 +24,6 @@ target/
 
 # gnupg keyring
 /.gnupg
+
+.project
+bin/
