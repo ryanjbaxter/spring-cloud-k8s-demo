@@ -1,0 +1,28 @@
+{{- if or (.Values.extraConfig) (.Values.extraSecret) (.Values.config) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "hot-deals.fullname" . }}-spring
+  labels:
+{{ include "hot-deals.labels" . | indent 4 }}
+data:
+{{- if or (.Values.extraConfig) (.Values.extraSecret) }}
+  application.yml: |-
+    spring:
+      cloud:
+        kubernetes:
+        {{- with .Values.extraConfig }}
+          config:
+            sources:
+            {{ . | toYaml | indent 12 }}
+        {{- end }}
+        {{- with .Values.extraSecret }}
+          secrets:
+            sources:
+            {{ . | toYaml | indent 12 }}
+        {{- end }}
+{{- end }}
+{{- if .Values.config }}
+{{ .Values.config | toYaml | indent 2 }}
+{{- end }}
+{{- end }}

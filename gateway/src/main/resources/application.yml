@@ -5,9 +5,6 @@ management:
         include: '*'
 server:
   port: 8070
-spring:
-  application:
-    name: gateway
   cloud:
     kubernetes:
       enabled: false

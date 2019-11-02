@@ -1,0 +1,64 @@
+{{- if .Values.rbac.enabled }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "fashion-bestseller.fullname" . }}-config
+  labels:
+    app.kubernetes.io/name: {{ include "fashion-bestseller.name" . }}
+    helm.sh/chart: {{ include "fashion-bestseller.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "watch", "list"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "fashion-bestseller.fullname" . }}-config
+  labels:
+    app.kubernetes.io/name: {{ include "fashion-bestseller.name" . }}
+    helm.sh/chart: {{ include "fashion-bestseller.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "fashion-bestseller.serviceAccountName" . }}
+roleRef:
+  kind: Role
+  name: {{ include "fashion-bestseller.fullname" . }}-config
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "fashion-bestseller.fullname" . }}-sd
+  labels:
+    app.kubernetes.io/name: {{ include "fashion-bestseller.name" . }}
+    helm.sh/chart: {{ include "fashion-bestseller.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+- apiGroups: [""]
+  resources: ["services", "pods", "endpoints"]
+  verbs: ["get", "watch", "list"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "fashion-bestseller.fullname" . }}-sd
+  labels:
+    app.kubernetes.io/name: {{ include "fashion-bestseller.name" . }}
+    helm.sh/chart: {{ include "fashion-bestseller.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "fashion-bestseller.serviceAccountName" . }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "fashion-bestseller.fullname" . }}-sd
+  apiGroup: rbac.authorization.k8s.io
+---
+{{- end }}

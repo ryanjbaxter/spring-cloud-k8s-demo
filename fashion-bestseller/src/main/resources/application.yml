@@ -1,14 +1,41 @@
+spring:
+  profiles:
+    active: development
+  cloud:
+    kubernetes.discovery.enabled: false
+    kubernetes.ribbon.enabled: false
+    kubernetes.enabled: false
+    gateway.discovery.locator.enabled: false
+
+chaos:
+  monkey:
+    enabled: false
+
 server:
   port: 8082
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+---
+spring:
+  profiles: development
+---
+spring:
+  profiles: chaos-monkey
 
 management:
   endpoint:
     chaosmonkey:
       enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+
 chaos:
   monkey:
     enabled: false
@@ -17,15 +44,5 @@ chaos:
       service: false
     assaults:
       latency-active: true
-spring:
-  profiles:
-    active: chaos-monkey
-  application:
-    name: fashion-bestseller
-  cloud:
-    kubernetes:
-      enabled: false
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+
+---

@@ -1,4 +1,4 @@
-FROM harisekhon/ubuntu-java
+FROM openjdk:11-jre-slim
 ARG SERVICE_NAME
 ARG JAR_FILE
 
