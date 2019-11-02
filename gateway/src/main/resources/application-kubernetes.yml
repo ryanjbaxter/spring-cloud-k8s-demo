@@ -4,6 +4,13 @@ spring:
       enabled: true
       reload:
         enabled: true
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          url-expression: "'http://'+serviceId"
+#    loadbalancer.ribbon.enabled: false
+
 eureka:
   client:
     enabled: false
@@ -11,3 +18,6 @@ eureka:
 dekorate:
   kubernetes:
     serviceType: "NodePort"
+
+# actuators shouldn't be public
+management.endpoint.restart.enabled: true

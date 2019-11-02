@@ -1,4 +1,4 @@
-FROM harisekhon/ubuntu-java
+FROM openjdk:11-jre-slim
 ARG SERVICE_NAME
 ARG JAR_FILE
 
@@ -12,4 +12,4 @@ ENV SPRING_PROFILES_ACTIVE="docker"
 LABEL APP=${SERVICE_NAME}
 LABEL DOMAIN="shopping-demo"
 
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
+CMD [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]

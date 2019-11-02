@@ -20,8 +20,6 @@ chaos:
 spring:
   profiles:
     active: chaos-monkey
-  application:
-    name: hot-deals
   cloud:
     kubernetes:
       enabled: false

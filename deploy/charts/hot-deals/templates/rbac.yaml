@@ -1,0 +1,64 @@
+{{- if .Values.rbac.enabled }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "hot-deals.fullname" . }}-config
+  labels:
+    app.kubernetes.io/name: {{ include "hot-deals.name" . }}
+    helm.sh/chart: {{ include "hot-deals.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "watch", "list"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "hot-deals.fullname" . }}-config
+  labels:
+    app.kubernetes.io/name: {{ include "hot-deals.name" . }}
+    helm.sh/chart: {{ include "hot-deals.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "hot-deals.serviceAccountName" . }}
+roleRef:
+  kind: Role
+  name: {{ include "hot-deals.fullname" . }}-config
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "hot-deals.fullname" . }}-sd
+  labels:
+    app.kubernetes.io/name: {{ include "hot-deals.name" . }}
+    helm.sh/chart: {{ include "hot-deals.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+- apiGroups: [""]
+  resources: ["services", "pods", "endpoints"]
+  verbs: ["get", "watch", "list"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "hot-deals.fullname" . }}-sd
+  labels:
+    app.kubernetes.io/name: {{ include "hot-deals.name" . }}
+    helm.sh/chart: {{ include "hot-deals.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "hot-deals.serviceAccountName" . }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "hot-deals.fullname" . }}-sd
+  apiGroup: rbac.authorization.k8s.io
+---
+{{- end }}

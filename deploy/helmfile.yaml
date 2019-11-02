@@ -1,0 +1,31 @@
+helmDefaults:
+  tillerless: true
+
+releases:
+  - name: fashion-bestseller
+    namespace: shop
+    chart: ./charts/fashion-bestseller
+    values:
+      - fullnameOverride: fashion-bestseller
+        nameOverride: fashion-bestseller
+
+  - name: gateway
+    namespace: shop
+    chart: ./charts/gateway
+    values:
+      - fullnameOverride: gateway
+        nameOverride: gateway
+
+  - name: hot-deals
+    namespace: shop
+    chart: ./charts/hot-deals
+    values:
+      - fullnameOverride: hot-deals
+        nameOverride: hot-deals
+
+  - name: toys-bestseller
+    namespace: shop
+    chart: ./charts/toys-bestseller
+    values:
+      - fullnameOverride: toys-bestseller
+        nameOverride: toys-bestseller

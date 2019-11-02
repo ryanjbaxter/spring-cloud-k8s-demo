@@ -18,6 +18,14 @@ Each project contains a Dockerfile that will create a container for the app.  Yo
 After building the container images you will need to push them to a repository that your Kubernetes
 deployment has access to, for example Docker Hub.
 
+```console
+PREFIX=paulczar
+docker push $PREFIX/toys-bestseller
+docker push $PREFIX/fashion-bestseller
+docker push $PREFIX/gateway
+docker push $PREFIX/hot-deals
+
+```
 ## Using Google Java Image Builder
 
 > Note: JIB can build and push images without needing docker installed
@@ -29,6 +37,8 @@ $ mvn compile jib:build
 ```
 
 # Deploying To Kubernetes
+
+## Dekorate
 
 Each project uses [Dekorate](https://github.com/dekorateio/dekorate) in order to build a YAML file that can be used to deploy the app to Kubernetes.
 
@@ -42,6 +52,11 @@ kubectl create --filename spring-cloud-k8s-demo/fashion-bestseller/target/classe
 kubectl create --filename spring-cloud-k8s-demo/hot-deals/target/classes/META-INF/dekorate/kubernetes.yml
 kubectl create --filename spring-cloud-k8s-demo/gateway/target/classes/META-INF/dekorate/kubernetes.yml
 ```
+
+## Helm
+
+```
+helm3 install fashion-bs ./deploy/helm/fashion-bestseller
 
 ## Testing The Apps
 

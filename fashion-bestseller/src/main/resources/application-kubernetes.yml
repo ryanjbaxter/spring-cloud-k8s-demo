@@ -4,9 +4,17 @@ spring:
       enabled: true
       reload:
         enabled: true
+        strategy: refresh
+management:
+  endpoint:
+    restart:
+      enabled: true
+
 eureka:
   client:
     enabled: false
 dekorate:
   kubernetes:
     serviceType: "NodePort"
+
+kubernetes.trust.certificates: true
