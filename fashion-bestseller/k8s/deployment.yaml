@@ -1,0 +1,74 @@
+---
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: fashion-bestseller
+      name: fashion-bestseller
+    spec:
+      ports:
+        - name: http
+          port: 8082
+          targetPort: 8082
+      selector:
+        app: fashion-bestseller
+      type: ClusterIP
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      labels:
+        app: spring-cloud-kubernetes-configuration-watcher
+      name: spring-cloud-kubernetes-configuration-watcher
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      labels:
+        app: spring-cloud-kubernetes-configuration-watcher
+      name: spring-cloud-kubernetes-configuration-watcher:view
+    roleRef:
+      kind: Role
+      apiGroup: rbac.authorization.k8s.io
+      name: namespace-reader
+    subjects:
+      - kind: ServiceAccount
+        name: spring-cloud-kubernetes-configuration-watcher
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      namespace: default
+      name: namespace-reader
+    rules:
+      - apiGroups: ["", "extensions", "apps"]
+        resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
+        verbs: ["get", "list", "watch"]
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: fashion-bestseller-deployment
+    spec:
+      selector:
+        matchLabels:
+          app: fashion-bestseller
+      template:
+        metadata:
+          labels:
+            app: fashion-bestseller
+        spec:
+          serviceAccount: spring-cloud-kubernetes-configuration-watcher
+          containers:
+          - name: fashion-bestseller
+            image: springone/fashion-bestseller
+            imagePullPolicy: IfNotPresent
+            readinessProbe:
+              httpGet:
+                port: 8082
+                path: /actuator/health/readiness
+            livenessProbe:
+              httpGet:
+                port: 8082
+                path: /actuator/health/liveness
+            ports:
+            - containerPort: 8082

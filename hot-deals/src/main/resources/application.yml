@@ -22,10 +22,17 @@ spring:
     active: chaos-monkey
   application:
     name: hot-deals
-  cloud:
-    kubernetes:
-      enabled: false
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+---
+spring:
+  config:
+    activate:
+      on-cloud-platform: kubernetes
+
+eureka:
+  client:
+    enabled: false

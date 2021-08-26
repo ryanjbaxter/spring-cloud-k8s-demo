@@ -3,6 +3,9 @@ server:
 
 management:
   endpoint:
+    health:
+      probes:
+        enabled: true
     chaosmonkey:
       enabled: true
   endpoints:
@@ -22,10 +25,17 @@ spring:
     active: chaos-monkey
   application:
     name: fashion-bestseller
-  cloud:
-    kubernetes:
-      enabled: false
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+---
+spring:
+  config:
+    activate:
+      on-cloud-platform: kubernetes
+
+eureka:
+  client:
+    enabled: false

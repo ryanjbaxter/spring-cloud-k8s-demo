@@ -1,0 +1,27 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+metadata:
+  name: fashion-bestseller
+build:
+#  artifacts:
+#  - image: ryanjbaxter/fashion-bestseller
+#  tagPolicy:
+#    envTemplate:
+#      template: "{{.IMAGE_NAME}}:{{.DIGEST_HEX}}"
+  artifacts:
+  - image: springone/hot-deals
+    custom:
+      buildCommand: "../mvnw clean install"
+      dependencies:
+        paths:
+          - src
+          - pom.xml
+#  local:
+
+#    jib: {
+#           args: ["-Pjib"]
+#    }
+deploy:
+  kubectl:
+    manifests:
+    - k8s/deployment.yaml

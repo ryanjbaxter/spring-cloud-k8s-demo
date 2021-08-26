@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: hot-deals
+      name: hot-deals
+    spec:
+      ports:
+        - name: http
+          port: 8083
+          targetPort: 8083
+      selector:
+        app: hot-deals
+      type: ClusterIP
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: hot-deals-deployment
+    spec:
+      selector:
+        matchLabels:
+          app: hot-deals
+      template:
+        metadata:
+          labels:
+            app: hot-deals
+        spec:
+          containers:
+          - name: hot-deals
+            image: 833443578445.dkr.ecr.us-east-2.amazonaws.com/hot-deals:1.0-SNAPSHOT
+            imagePullPolicy: Always
+            readinessProbe:
+              httpGet:
+                port: 8083
+                path: /actuator/health/readiness
+            livenessProbe:
+              httpGet:
+                port: 8083
+                path: /actuator/health/liveness
+            ports:
+            - containerPort: 8083

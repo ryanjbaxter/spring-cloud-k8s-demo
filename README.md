@@ -12,20 +12,7 @@ your own prefix.
 After building the container images you will need to push them to a repository that your Kubernetes
 deployment has access to, for example Docker Hub.
 
-# Deploying To Kubernetes 
-
-Each project uses [Dekorate](https://github.com/dekorateio/dekorate) in order to build a YAML file that can be used to deploy the app to Kubernetes.
-
-To create the YAML files all you need to do is run `./mvnw clean package`.  The YAML files are located in
-`/<module>/target/classes/META-INF/dekorate`.  
-
-```
-kubectl create --filename spring-cloud-k8s-demo/toys-bestseller/configmap.yml
-kubectl create --filename spring-cloud-k8s-demo/toys-bestseller/target/classes/META-INF/dekorate/kubernetes.yml
-kubectl create --filename spring-cloud-k8s-demo/fashion-bestseller/target/classes/META-INF/dekorate/kubernetes.yml
-kubectl create --filename spring-cloud-k8s-demo/hot-deals/target/classes/META-INF/dekorate/kubernetes.yml
-kubectl create --filename spring-cloud-k8s-demo/gateway/target/classes/META-INF/dekorate/kubernetes.yml
-```
+# Deploying To Kubernetes
 
 ## Testing The Apps
 

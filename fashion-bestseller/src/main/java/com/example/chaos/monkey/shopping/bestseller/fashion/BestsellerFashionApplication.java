@@ -6,6 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
+///thisdfvdfasd
 public class BestsellerFashionApplication {
 
 	public static void main(String[] args) {

@@ -6,3 +6,4 @@ metadata:
     "spring.cloud.kubernetes.config": "true"
 data:
   chaos.monkey.enabled: "false"
+  chaos.monkey.assaults.latencyActive: "true"

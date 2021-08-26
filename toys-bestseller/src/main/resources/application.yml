@@ -21,6 +21,7 @@ chaos:
       restController: true
       service: false
     assaults:
+      level: 3
       latency-active: true
 
 # Spring Boot Actuator Endpoint Chaos Monkey for Spring Boot
@@ -40,3 +41,14 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+---
+spring:
+  config:
+    activate:
+      on-cloud-platform: kubernetes
+    import: configserver:http://spring-cloud-kubernetes-configserver:8888
+
+eureka:
+  client:
+    enabled: false
