@@ -1,38 +1,15 @@
 server:
   port: 8083
 
-management:
-  endpoint:
-    chaosmonkey:
-      enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-chaos:
-  monkey:
-    enabled: false
-    watcher:
-      restController: true
-      service: false
-    assaults:
-      latency-active: false
 spring:
-  profiles:
-    active: chaos-monkey
   application:
     name: hot-deals
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+  config:
+    import: configserver:http://localhost:8888
 
 ---
 spring:
   config:
     activate:
       on-cloud-platform: kubernetes
-
-eureka:
-  client:
-    enabled: false
+    import: configserver:http://spring-cloud-kubernetes-configserver:8888

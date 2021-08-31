@@ -13,6 +13,8 @@
         <module>toys-bestseller</module>
         <module>gateway</module>
         <module>shared</module>
+        <module>configserver</module>
+        <module>discoveryserver</module>
     </modules>
     <packaging>pom</packaging>
 
