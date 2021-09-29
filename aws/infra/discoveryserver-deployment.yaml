@@ -61,7 +61,7 @@ items:
           containers:
           - name: spring-cloud-kubernetes-discoveryserver
             image: 833443578445.dkr.ecr.us-east-2.amazonaws.com/spring-cloud-kubernetes-discoveryserver:2.0.4-SNAPSHOT
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             readinessProbe:
               httpGet:
                 port: 8761
