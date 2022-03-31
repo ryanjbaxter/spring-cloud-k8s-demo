@@ -27,7 +27,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
-        <spring-boot-dependencies.version>2.2.2.RELEASE</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>2.5.12</spring-boot-dependencies.version>
         <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
         <lombok.version>1.18.10</lombok.version>
         <chaos-monkey-spring-boot.version>2.1.1</chaos-monkey-spring-boot.version>
