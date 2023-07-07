@@ -13,6 +13,8 @@
         <module>toys-bestseller</module>
         <module>gateway</module>
         <module>shared</module>
+        <module>configserver</module>
+        <module>discoveryserver</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -27,10 +29,10 @@
         <java.version>1.8</java.version>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
-        <spring-boot-dependencies.version>2.2.2.RELEASE</spring-boot-dependencies.version>
-        <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
+        <spring-boot-dependencies.version>2.5.3</spring-boot-dependencies.version>
+        <spring-cloud.version>2020.0.4-SNAPSHOT</spring-cloud.version>
         <lombok.version>1.18.10</lombok.version>
-        <chaos-monkey-spring-boot.version>2.1.1</chaos-monkey-spring-boot.version>
+        <chaos-monkey-spring-boot.version>2.3.0</chaos-monkey-spring-boot.version>
     </properties>
 
     <dependencyManagement>
@@ -89,11 +91,6 @@
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <dependency>
-            	<groupId>io.dekorate</groupId>
-            	<artifactId>kubernetes-spring-starter</artifactId>
-            	<version>0.7.5</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -116,6 +113,17 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>imagename</id>
+            <activation>
+                <property>
+                    <name>!env.IMAGE</name>
+                </property>
+            </activation>
+            <properties>
+                <env.IMAGE>${project.artifactId}:${project.version}</env.IMAGE>
+            </properties>
+        </profile>
         <profile>
             <id>docker</id>
             <build>

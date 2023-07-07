@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: toys-bestseller
+      name: toys-bestseller
+    spec:
+      ports:
+        - name: http
+          port: 8081
+          targetPort: 8081
+      selector:
+        app: toys-bestseller
+      type: LoadBalancer
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: toys-bestseller-deployment
+    spec:
+      selector:
+        matchLabels:
+          app: toys-bestseller
+      template:
+        metadata:
+          labels:
+            app: toys-bestseller
+        spec:
+          containers:
+          - name: toys-bestseller
+            image:  833443578445.dkr.ecr.us-east-2.amazonaws.com/toys-bestseller:1.0-SNAPSHOT
+            imagePullPolicy: Always
+            readinessProbe:
+              httpGet:
+                port: 8081
+                path: /actuator/health/readiness
+            livenessProbe:
+              httpGet:
+                port: 8081
+                path: /actuator/health/liveness
+            ports:
+            - containerPort: 8081

@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  application.yaml: |-
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+kind: ConfigMap
+metadata:
+  name: application

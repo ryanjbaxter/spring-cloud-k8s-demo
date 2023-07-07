@@ -1,0 +1,11 @@
+
+spring:
+  profiles:
+    active: git
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/ryanjbaxter/s1-2021-config
+server:
+  port: 8888
